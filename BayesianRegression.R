@@ -23,11 +23,16 @@ b1=b0+.5*(t(betaorig)%*%solve(covariance0)%*%betaorig+as.matrix(t(data[,response
             t(theta1)%*%solve(covariance0)%*%theta1)
 predictions=t(theta1)%*%t(as.matrix(data[,specifiedVariables]))
 MSE=(1/nrow(data))*sum((predictions-data[,response])^2)
+R2=1-sum((predictions-data[,response])^2)/(sum((data[,response]-mean(as.matrix(data[,response])))^2))
 
 fit<-lm(as.formula(paste(response,"~",paste(specifiedVariables[specifiedVariables!="Intercept"],collapse = "+"),sep="")),data=data)
-summary(fit)
+summary(fit);R2
 mean(fit$residuals^2);MSE
 fit$coefficients;theta1
+
+sims1=10000
+
+sds1=rinvgamma(sims1,a1,b1)
 
 
 
